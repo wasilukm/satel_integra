@@ -361,7 +361,11 @@ class AsyncSatel:
             _LOGGER.debug("-- ------------- --")
             return verify_and_strip(data)
 
+        except asyncio.exceptions.IncompleteReadError as err:
+            if b'Busy!' in err.partial:
+                _LOGGER.warning('The server is busy.')
         except Exception as e:
+            raise e
             _LOGGER.warning(
                 "Got exception: %s. Most likely the other side has "
                 "disconnected!", e)
@@ -464,8 +468,8 @@ def demo(host, port):
                      )
 
     loop.run_until_complete(stl.connect())
-    loop.create_task(stl.arm("3333", 1))
-    loop.create_task(stl.disarm("3333"))
+    loop.create_task(stl.arm("3333", [1]))
+    loop.create_task(stl.disarm("3333", [1]))
     loop.create_task(stl.keep_alive())
     loop.create_task(stl.monitor_status())
 
