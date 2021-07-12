@@ -363,7 +363,8 @@ class AsyncSatel:
 
         except asyncio.exceptions.IncompleteReadError as err:
             if b'Busy!' in err.partial:
-                _LOGGER.warning('The server is busy.')
+                _LOGGER.warning('The server is busy. Waiting 1 sec.')
+                await asyncio.sleep(1)
         except Exception as e:
             raise e
             _LOGGER.warning(
