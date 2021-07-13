@@ -366,7 +366,6 @@ class AsyncSatel:
                 _LOGGER.warning('The server is busy. Waiting 1 sec.')
                 await asyncio.sleep(1)
         except Exception as e:
-            raise e
             _LOGGER.warning(
                 "Got exception: %s. Most likely the other side has "
                 "disconnected!", e)
