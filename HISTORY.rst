@@ -10,13 +10,13 @@ History
 0.2.0 (2018-12-20)
 ------------------
 
-* Integrated changes from community: added monitoring of ouitputs.
-* Attempt at fixing issue with "state unknown" of the alarm. Unfurtunately unsuccesful.
+* Integrated changes from community: added monitoring of outputs.
+* Attempt at fixing issue with "state unknown" of the alarm. Unfortunately unsuccessful.
 
 0.3.1 (2019-02-13)
 ------------------
 
-* improved robustness when connection disapears
+* improved robustness when connection disappears
 * fixed issues with "status unknown" which caused blocking of the functionality in HA
 - still existing issues with alarm status - to be fixed
 
@@ -30,4 +30,8 @@ History
 ------------------
 
 * Added ENTRY_TIME status to display "DISARMING" status in HA
-* Fixed issue with unhandled connection error  causing HomeAssistant to give up on coommunication with eth module completely
+* Fixed issue with unhandled connection error  causing HomeAssistant to give up on communication with eth module completely
+
+0.4.0 (2021-08-21)
+------------------
+* Added support for encrypted communication

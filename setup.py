@@ -13,6 +13,7 @@ with open('HISTORY.rst') as history_file:
 
 requirements = [
     'Click>=6.0',
+    'cryptography',
 ]
 
 setup_requirements = [
@@ -25,7 +26,7 @@ test_requirements = [
 
 setup(
     name='satel_integra',
-    version='0.3.4',
+    version='0.4.0',
     description="Communication library and basic testing tool for Satel "
                 "Integra alarm system. Communication via tcpip protocol "
                 "published by SATEL. ",
