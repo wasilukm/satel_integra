@@ -2,8 +2,16 @@
 import os
 from typing import List
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
+import logging
 
 BLOCK_LENGTH = 16
+
+_LOGGER = logging.getLogger(__name__)
+
+
+def to_hex(data):
+    """Debugging method to print out frames in hex."""
+    return ''.join('\\x{:02x}'.format(x) for x in data)
 
 
 class EncryptionHandler:
@@ -67,8 +75,12 @@ class EncryptionHandler:
 
     def prepare_pdu(self, message: bytes) -> bytes:
         """Prepare protocol data unit."""
-        pdu = self._prepare_header() + message
+        _LOGGER.debug(f'Encrypting {len(message):2d} bytes, msg: {to_hex(message)}')
+        header = self._prepare_header()
+        _LOGGER.debug(f'Transmit header header{to_hex(header)}')
+        pdu = header + message
         encrypted_pdu = self.encrypt(pdu)
+        _LOGGER.debug(f'Encrypted {len(encrypted_pdu):2d} bytes, msg: {to_hex(encrypted_pdu)}')
         return encrypted_pdu
 
     def decrypt(self, pdu: bytes) -> bytes:
@@ -93,9 +105,13 @@ class EncryptionHandler:
 
     def extract_data_from_pdu(self, pdu: bytes) -> bytes:
         """Extract data from protocol data unit."""
+        _LOGGER.debug(f'Decrypting {len(pdu):2d} bytes, msg: {to_hex(pdu)}')
         decrypted_pdu = self.decrypt(pdu)
         header = decrypted_pdu[:6]
+        _LOGGER.debug(f'Decrypted header {to_hex(header)}')
         data = decrypted_pdu[6:]
+        _LOGGER.debug(f'Decrypted msg {to_hex(header)}')
+
         self._id_r = header[4]
         if self._id_s != decrypted_pdu[5]:
             raise RuntimeError(
