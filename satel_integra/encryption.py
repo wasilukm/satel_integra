@@ -77,7 +77,7 @@ class EncryptionHandler:
         """Prepare protocol data unit."""
         _LOGGER.debug(f'Encrypting {len(message):2d} bytes, msg: {to_hex(message)}')
         header = self._prepare_header()
-        _LOGGER.debug(f'Transmit header header{to_hex(header)}')
+        _LOGGER.debug(f'Transmit header {to_hex(header)}')
         pdu = header + message
         encrypted_pdu = self.encrypt(pdu)
         _LOGGER.debug(f'Encrypted {len(encrypted_pdu):2d} bytes, msg: {to_hex(encrypted_pdu)}')
@@ -114,7 +114,8 @@ class EncryptionHandler:
 
         self._id_r = header[4]
         if self._id_s != decrypted_pdu[5]:
-            raise RuntimeError(
-                f'Incorrect value of ID_S, received \\x{decrypted_pdu[5]:x} but expected \\x{self._id_s:x}\n'
-                'Decrypted data: %s' % ''.join('\\x{:02x}'.format(x) for x in decrypted_pdu))
+            msg = (f'Incorrect value of ID_S, received \\x{decrypted_pdu[5]:x} but expected \\x{self._id_s:x}\n'
+                   'Decrypted data: %s' % ''.join('\\x{:02x}'.format(x) for x in decrypted_pdu))
+            _LOGGER.error(msg)
+            raise RuntimeError(msg)
         return bytes(data)
