@@ -99,6 +99,6 @@ class EncryptionHandler:
         self._id_r = header[4]
         if self._id_s != decrypted_pdu[5]:
             raise RuntimeError(
-                f'Incorrect value of ID_S, received {self._id_s:d} but expected {decrypted_pdu[5]:d}\n'
+                f'Incorrect value of ID_S, received \\x{decrypted_pdu[5]:x} but expected \\x{self._id_s:x}\n'
                 'Decrypted data: %s' % ''.join('\\x{:02x}'.format(x) for x in decrypted_pdu))
         return bytes(data)
