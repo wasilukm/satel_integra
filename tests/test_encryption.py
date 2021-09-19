@@ -3,7 +3,6 @@
 
 """Tests for encryption module."""
 
-import os
 import pytest
 from unittest.mock import patch, MagicMock
 from satel_integra.encryption import EncryptedCommunicationHandler, SatelEncryption
