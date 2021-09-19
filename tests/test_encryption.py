@@ -56,7 +56,7 @@ class TestProtocol:
         """
         with patch.object(SatelEncryption, 'encrypt', MagicMock(side_effect=lambda x: x)):
             communication_handler = EncryptedCommunicationHandler('some_key')
-            current_id_s = communication_handler.prepare_pdu(b'')[5]
+            current_id_s = communication_handler.prepare_pdu(b'')[4]
             with patch.object(SatelEncryption, 'decrypt', side_effect=lambda x: x):
                 communication_handler.extract_data_from_pdu(b'heade%bsome_message' % current_id_s.to_bytes(1, 'big'))
                 with pytest.raises(RuntimeError):
@@ -70,10 +70,10 @@ class TestEncryption:
 
     def test_key_conversion(self):
         """Verify conversion of integration key to encryption key."""
-        assert SatelEncryption._integration_key_to_encryption_key('') == b'                        '
-        assert SatelEncryption._integration_key_to_encryption_key('short_key') == b'short_key   short_key   '
-        assert SatelEncryption._integration_key_to_encryption_key('long_key1234') == b'long_key1234long_key1234'
-        assert SatelEncryption._integration_key_to_encryption_key('too_long_key1234') == b'too_long_keytoo_long_key'
+        assert SatelEncryption.integration_key_to_encryption_key('') == b'                        '
+        assert SatelEncryption.integration_key_to_encryption_key('short_key') == b'short_key   short_key   '
+        assert SatelEncryption.integration_key_to_encryption_key('long_key1234') == b'long_key1234long_key1234'
+        assert SatelEncryption.integration_key_to_encryption_key('too_long_key1234') == b'too_long_keytoo_long_key'
 
     def test_encrypt(self):
         """Verify encryption."""

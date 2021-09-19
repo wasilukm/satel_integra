@@ -15,11 +15,11 @@ class SatelEncryption:
     """
 
     def __init__(self, integration_key: str):
-        encryption_key = self._integration_key_to_encryption_key(integration_key)
+        encryption_key = self.integration_key_to_encryption_key(integration_key)
         self.cipher = Cipher(algorithms.AES(encryption_key), modes.ECB())
 
     @classmethod
-    def _integration_key_to_encryption_key(cls, integration_key: str) -> bytes:
+    def integration_key_to_encryption_key(cls, integration_key: str) -> bytes:
         """Convert Satel integration key into encryption key."""
         integration_key_bytes = bytes(integration_key, 'ascii')
         key = [0] * 24
