@@ -5,7 +5,7 @@
 import asyncio
 import logging
 from enum import Enum, unique
-from .encryption import EncryptionHandler
+from .encryption import EncryptedCommunicationHandler
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -189,7 +189,7 @@ class AsyncSatel:
             return False
 
         if self._integration_key:
-            self._encryption_handler = EncryptionHandler(self._integration_key)
+            self._encryption_handler = EncryptedCommunicationHandler(self._integration_key)
 
         return True
 
