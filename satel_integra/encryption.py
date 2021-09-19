@@ -10,7 +10,7 @@ class SatelEncryption:
 
     """Encryptor and decryptor for Satel integration protocol.
 
-    :param integration_key: Satel integration key
+    :param integration_key: Satel integration key to be used for encrypting and decrypting data.
 
     """
 
@@ -20,7 +20,13 @@ class SatelEncryption:
 
     @classmethod
     def integration_key_to_encryption_key(cls, integration_key: str) -> bytes:
-        """Convert Satel integration key into encryption key."""
+        """Convert Satel integration key into encryption key.
+
+        :param integration_key: Satel integration key
+
+        :returns: encryption key
+
+        """
         integration_key_bytes = bytes(integration_key, 'ascii')
         key = [0] * 24
         for i in range(12):
@@ -32,15 +38,21 @@ class SatelEncryption:
         """Split message into list of blocks of equal length."""
         return [message[i:i + block_len] for i in range(0, len(message), block_len)]
 
-    def encrypt(self, pdu: bytes) -> bytes:
-        """Encrypt protocol data unit."""
-        if len(pdu) < BLOCK_LENGTH:
-            pdu += b'\x00' * (BLOCK_LENGTH - len(pdu))
-        encrypted_pdu = []
+    def encrypt(self, data: bytes) -> bytes:
+        """Encrypt protocol data unit.
+
+        :param data: data to be encrypted
+
+        :returns: encrypted data
+
+        """
+        if len(data) < BLOCK_LENGTH:
+            data += b'\x00' * (BLOCK_LENGTH - len(data))
+        encrypted_data = []
         encryptor = self.cipher.encryptor()
         cv = [0] * BLOCK_LENGTH
         cv = list(encryptor.update(bytes(cv)))
-        for block in self._bytes_to_blocks(pdu, BLOCK_LENGTH):
+        for block in self._bytes_to_blocks(data, BLOCK_LENGTH):
             p = list(block)
             if len(block) == BLOCK_LENGTH:
                 p = [a ^ b for a, b in zip(p, cv)]
@@ -49,17 +61,23 @@ class SatelEncryption:
             else:
                 cv = list(encryptor.update(bytes(cv)))
                 p = [a ^ b for a, b in zip(p, cv)]
-            encrypted_pdu += p
-        return bytes(encrypted_pdu)
+            encrypted_data += p
+        return bytes(encrypted_data)
 
-    def decrypt(self, pdu: bytes) -> bytes:
-        """Decrypt message."""
-        decrypted_pdu = []
+    def decrypt(self, data: bytes) -> bytes:
+        """Decrypt message.
+
+        :param data: data to be decrypted
+
+        :returns: decrypted data
+
+        """
+        decrypted_data = []
         cv = [0] * BLOCK_LENGTH
         decryptor = self.cipher.decryptor()
         encryptor = self.cipher.encryptor()
         cv = list(encryptor.update(bytes(cv)))
-        for block in self._bytes_to_blocks(pdu, BLOCK_LENGTH):
+        for block in self._bytes_to_blocks(data, BLOCK_LENGTH):
             temp = list(block)
             c = list(block)
             if len(block) == BLOCK_LENGTH:
@@ -69,15 +87,15 @@ class SatelEncryption:
             else:
                 cv = list(encryptor.update(bytes(cv)))
                 c = [a ^ b for a, b in zip(c, cv)]
-            decrypted_pdu += c
-        return bytes(decrypted_pdu)
+            decrypted_data += c
+        return bytes(decrypted_data)
 
 
 class EncryptedCommunicationHandler:
 
-    """Encryption handler for Satel integration protocol.
+    """Handler for Satel encrypted communications.
 
-    :param integration_key: Satel integration key
+    :param integration_key: Satel integration key to be used for encrypting and decrypting data.
 
     """
 
