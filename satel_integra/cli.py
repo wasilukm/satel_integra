@@ -8,6 +8,7 @@ from satel_integra import demo
 
 # pragma: no cover
 
+
 @click.command()
 @click.option('--command', default="demo", help='Command on what to do.')
 @click.option('--ip', default='192.168.2.230',
