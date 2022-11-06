@@ -39,7 +39,7 @@ jobs:
 
       - name: test with tox
         run:
-          tox
+          tox -vv
 
       - name: list files
         run: ls -l .
