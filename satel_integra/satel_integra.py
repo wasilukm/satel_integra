@@ -85,13 +85,13 @@ def output_bytes(output):
 
 
 def partition_bytes(partition_list):
-        ret_val = 0
-        for position in partition_list:
-            if position >= 32:
-                raise IndexError()
-            ret_val = ret_val | (1 << (position - 1))
+    ret_val = 0
+    for position in partition_list:
+        if position >= 32:
+            raise IndexError()
+        ret_val = ret_val | (1 << (position - 1))
 
-        return ret_val.to_bytes(4, 'little')
+    return ret_val.to_bytes(4, 'little')
 
 
 @unique
@@ -465,7 +465,7 @@ def demo(host, port):
 
     loop.run_until_complete(stl.connect())
     loop.create_task(stl.arm("3333", (1,)))
-    loop.create_task(stl.disarm("3333",(1,)))
+    loop.create_task(stl.disarm("3333", (1,)))
     loop.create_task(stl.keep_alive())
     loop.create_task(stl.monitor_status())
 
