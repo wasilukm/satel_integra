@@ -84,7 +84,7 @@ def output_bytes(output):
     return output_no.to_bytes(32, 'little')
 
 
-def partition_bytes(partition_list):
+def partition_bytes(partition_list):  # pragma: no cover
     ret_val = 0
     for position in partition_list:
         if position >= 32:
@@ -450,7 +450,7 @@ class AsyncSatel:
             self._writer.close()
 
 
-def demo(host, port):
+def demo(host, port):  # pragma: no cover
     """Basic demo of the monitoring capabilities."""
     # logging.basicConfig(level=logging.DEBUG)
 
