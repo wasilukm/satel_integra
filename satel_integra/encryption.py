@@ -7,15 +7,16 @@ BLOCK_LENGTH = 16
 
 
 class SatelEncryption:
-
     """Encryptor and decryptor for Satel integration protocol.
 
-    :param integration_key: Satel integration key to be used for encrypting and decrypting data.
+    :param integration_key:
+        Satel integration key to be used for encrypting and decrypting data.
 
     """
 
     def __init__(self, integration_key: str):
-        encryption_key = self.integration_key_to_encryption_key(integration_key)
+        encryption_key = self.integration_key_to_encryption_key(
+            integration_key)
         self.cipher = Cipher(algorithms.AES(encryption_key), modes.ECB())
 
     @classmethod
@@ -30,13 +31,15 @@ class SatelEncryption:
         integration_key_bytes = bytes(integration_key, 'ascii')
         key = [0] * 24
         for i in range(12):
-            key[i] = key[i + 12] = integration_key_bytes[i] if len(integration_key_bytes) > i else 0x20
+            key[i] = key[i + 12] = integration_key_bytes[i] if len(
+                integration_key_bytes) > i else 0x20
         return bytes(key)
 
     @classmethod
     def _bytes_to_blocks(cls, message: bytes, block_len: int) -> List[bytes]:
         """Split message into list of blocks of equal length."""
-        return [message[i:i + block_len] for i in range(0, len(message), block_len)]
+        return [message[i:i + block_len] for i in
+                range(0, len(message), block_len)]
 
     def encrypt(self, data: bytes) -> bytes:
         """Encrypt protocol data unit.
@@ -92,10 +95,10 @@ class SatelEncryption:
 
 
 class EncryptedCommunicationHandler:
-
     """Handler for Satel encrypted communications.
 
-    :param integration_key: Satel integration key to be used for encrypting and decrypting data.
+    :param integration_key:
+        Satel integration key to be used for encrypting and decrypting data.
 
     """
 
@@ -103,8 +106,9 @@ class EncryptedCommunicationHandler:
 
     def __init__(self, integration_key: str):
         self._rolling_counter: int = 0
-        # There will be a new value of id_s for each instance . As there will be rather one client this doesn't
-        # have much use. However id_s value may show how many reconnections there where.
+        # There will be a new value of id_s for each instance . As there will
+        # be rather one client this doesn't have much use. However id_s value
+        # may show how many reconnections there where.
         self._id_s: int = EncryptedCommunicationHandler.next_id_s
         EncryptedCommunicationHandler.next_id_s += 1
         self._id_r: int = 0
@@ -146,6 +150,8 @@ class EncryptedCommunicationHandler:
         self._id_r = header[4]
         if (self._id_s & 0xFF) != decrypted_pdu[5]:
             raise RuntimeError(
-                f'Incorrect value of ID_S, received \\x{decrypted_pdu[5]:x} but expected \\x{self._id_s:x}\n'
-                'Decrypted data: %s' % ''.join('\\x{:02x}'.format(x) for x in decrypted_pdu))
+                f'Incorrect value of ID_S, received \\x{decrypted_pdu[5]:x} '
+                f'but expected \\x{self._id_s:x}\n'
+                'Decrypted data: %s' % ''.join(
+                    '\\x{:02x}'.format(x) for x in decrypted_pdu))
         return bytes(data)

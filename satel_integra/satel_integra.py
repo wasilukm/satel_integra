@@ -88,13 +88,13 @@ def output_bytes(output):
 
 
 def partition_bytes(partition_list):
-        ret_val = 0
-        for position in partition_list:
-            if position >= 32:
-                raise IndexError()
-            ret_val = ret_val | (1 << (position - 1))
+    ret_val = 0
+    for position in partition_list:
+        if position >= 32:
+            raise IndexError()
+        ret_val = ret_val | (1 << (position - 1))
 
-        return ret_val.to_bytes(4, 'little')
+    return ret_val.to_bytes(4, 'little')
 
 
 @unique
@@ -189,7 +189,8 @@ class AsyncSatel:
             return False
 
         if self._integration_key:
-            self._encryption_handler = EncryptedCommunicationHandler(self._integration_key)
+            self._encryption_handler = EncryptedCommunicationHandler(
+                self._integration_key)
 
         return True
 
@@ -279,7 +280,8 @@ class AsyncSatel:
             return
         if self._encryption_handler:
             data = self._encryption_handler.prepare_pdu(data)
-            data = (len(data)).to_bytes(1, 'big') + data  # add PDU length at the beginning
+            # add PDU length at the beginning
+            data = (len(data)).to_bytes(1, 'big') + data
             _LOGGER.debug("-- ------------- --")
             _LOGGER.debug("-- Encrypted data --")
             print_hex(data)
