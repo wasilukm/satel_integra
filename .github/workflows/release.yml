@@ -40,7 +40,7 @@ jobs:
         with:
           validation_depth: 10
           version: ${{ steps.tag_name.outputs.current_version }}
-          path: ./HISTORY.rst
+          path: ./CHANGELOG.md
 
       - uses: actions/setup-python@v2
         with:
