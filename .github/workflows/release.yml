@@ -41,7 +41,6 @@ jobs:
           validation_depth: 10
           version: ${{ steps.tag_name.outputs.current_version }}
           path: ./CHANGELOG.md
-          validation_level: error
 
       - uses: actions/setup-python@v2
         with:
